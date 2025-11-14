@@ -1,5 +1,4 @@
 from typing import List, Optional
-import uuid
 
 from repositories.user_repository import UserRepository
 from models import User
@@ -9,7 +8,7 @@ class UserService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
-    async def get_by_id(self, user_id: uuid.UUID) -> Optional[User]:
+    async def get_by_id(self, user_id: int) -> Optional[User]:
         """Получить пользователя по ID"""
         return await self.user_repository.get_by_id(user_id)
 
@@ -21,13 +20,14 @@ class UserService:
         """Создать нового пользователя"""
         return await self.user_repository.create(user_data)
 
-    async def update(self, user_id: uuid.UUID, user_data: UserUpdate) -> User:
+    async def update(self, user_id: int, user_data: UserUpdate) -> User:
         """Обновить пользователя"""
         return await self.user_repository.update(user_id, user_data)
 
     async def delete(self, user_id: int) -> None:
         """Удалить пользователя"""
         return await self.user_repository.delete(user_id)
+    
     async def get_total_count(self, **kwargs) -> int:
         """Получить общее количество пользователей"""
         return await self.user_repository.get_total_count(**kwargs)

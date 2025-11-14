@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import Optional, List
-import uuid
 from datetime import datetime
 
 
@@ -22,7 +21,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     """Для ответа API - добавляем системные поля"""
-    id: uuid.UUID
+    id: int
     created_at: datetime
     updated_at: datetime
 

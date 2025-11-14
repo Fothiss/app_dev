@@ -1,10 +1,8 @@
 from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
-from sqlalchemy import ForeignKey, String, Boolean, DateTime, Numeric, Text
+from sqlalchemy import ForeignKey, String, Boolean, DateTime, Numeric, Text, Integer
 from typing import List, Optional
 from decimal import Decimal
-from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
-import uuid
 
 class Base(DeclarativeBase):
     pass
@@ -12,14 +10,14 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    id: Mapped[int] = mapped_column(
+        Integer,
         primary_key=True,
-        default=uuid.uuid4,
+        autoincrement=True,
         index=True)
 
     username: Mapped[str] = mapped_column(String(50), nullable=False, unique=True, index=True)
-    email: Mapped[str] = mapped_column(String(100), nullable=False, unique=True,index=True)
+    email: Mapped[str] = mapped_column(String(100), nullable=False, unique=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     description: Mapped[str] = mapped_column(String(300), nullable=True)
@@ -30,14 +28,14 @@ class User(Base):
 class Address(Base):
     __tablename__ = 'addresses'
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    id: Mapped[int] = mapped_column(
+        Integer,
         primary_key=True,
-        default=uuid.uuid4,
+        autoincrement=True,
         index=True)
     
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    user_id: Mapped[int] = mapped_column(
+        Integer,
         ForeignKey('users.id', ondelete='CASCADE'), 
         nullable=False,
         index=True)
@@ -48,17 +46,17 @@ class Address(Base):
     zip_code: Mapped[str] = mapped_column(String(20))
     country: Mapped[str] = mapped_column(String(100), nullable=False)
     is_primary: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default = datetime.now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default = datetime.now)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     user: Mapped['User'] = relationship('User', back_populates='addresses')
 
 class Product(Base):
     __tablename__ = "products"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    id: Mapped[int] = mapped_column(
+        Integer,
         primary_key=True,
-        default=uuid.uuid4,
+        autoincrement=True,
         index=True)
     
     name: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -70,26 +68,26 @@ class Product(Base):
 class Order(Base):
     __tablename__ = "orders"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    id: Mapped[int] = mapped_column(
+        Integer,
         primary_key=True,
-        default=uuid.uuid4,
+        autoincrement=True,
         index=True)
 
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    user_id: Mapped[int] = mapped_column(
+        Integer,
         ForeignKey('users.id', ondelete='CASCADE'),
         nullable=False,
         index=True)
     
-    address_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    address_id: Mapped[int] = mapped_column(
+        Integer,
         ForeignKey('addresses.id', ondelete='CASCADE'),
         nullable=False,
         index=True)
     
-    product_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+    product_id: Mapped[int] = mapped_column(
+        Integer,
         ForeignKey('products.id', ondelete='CASCADE'),
         nullable=False,
         index=True)

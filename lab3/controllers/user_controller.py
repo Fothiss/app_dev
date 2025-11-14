@@ -3,7 +3,6 @@ from litestar.params import Parameter, Body
 from litestar.di import Provide
 from litestar.exceptions import NotFoundException
 from typing import List, Optional
-import uuid
 
 from services.user_service import UserService
 from models import User
@@ -11,13 +10,12 @@ from schemas import UserCreate, UserUpdate, UserResponse, UsersListResponse
 
 class UserController(Controller):
     path = "/users"
-#    dependencies = {"user_service": Provide("user_service")}
 
-    @get("/{user_id:uuid}")
+    @get("/{user_id:int}") 
     async def get_user_by_id(
         self, 
         user_service: UserService, 
-        user_id: uuid.UUID = Parameter()
+        user_id: int = Parameter() 
         ) -> UserResponse:
         """Получить пользователя по ID"""
         user = await user_service.get_by_id(user_id)
@@ -62,20 +60,20 @@ class UserController(Controller):
         
         return response
 
-    @delete("/{user_id:uuid}")
+    @delete("/{user_id:int}")
     async def delete_user(
         self,
         user_service: UserService,
-        user_id: uuid.UUID = Parameter(),
+        user_id: int = Parameter(),
     ) -> None:
         """Удалить пользователя"""
         await user_service.delete(user_id)
 
-    @put("/{user_id:uuid}")
+    @put("/{user_id:int}")
     async def update_user(
         self,
         user_service: UserService,
-        user_id: uuid.UUID = Parameter(),
+        user_id: int = Parameter(),
         data: UserUpdate = Body(),
     ) -> UserResponse:
         """Обновить пользователя"""

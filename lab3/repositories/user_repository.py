@@ -1,7 +1,6 @@
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-import uuid
 from models import User
 from schemas import UserCreate, UserUpdate
 
@@ -9,7 +8,8 @@ from schemas import UserCreate, UserUpdate
 class UserRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
-    async def get_by_id(self, user_id: uuid.UUID) -> Optional[User]:
+        
+    async def get_by_id(self, user_id: int) -> Optional[User]:
         """Получить пользователя по ID"""
         result = await self.session.execute(
             select(User).where(User.id == user_id)
@@ -43,7 +43,7 @@ class UserRepository:
         await self.session.refresh(user)
         return user
 
-    async def update(self, user_id: uuid.UUID, user_data: UserUpdate) -> Optional[User]:
+    async def update(self, user_id: int, user_data: UserUpdate) -> Optional[User]:  # МЕНЯЕМ НА int
         """Обновить пользователя"""
         user = await self.get_by_id(user_id)
         if not user:
@@ -58,7 +58,7 @@ class UserRepository:
         await self.session.refresh(user)
         return user
 
-    async def delete(self, user_id: uuid.UUID) -> None:
+    async def delete(self, user_id: int) -> None:
         """Удалить пользователя"""
         user = await self.get_by_id(user_id)
         if user:
@@ -77,4 +77,3 @@ class UserRepository:
         count = result.scalar()
 
         return count
-

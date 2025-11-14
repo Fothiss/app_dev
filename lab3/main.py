@@ -7,11 +7,13 @@ import os
 from litestar import Litestar
 from litestar.di import Provide
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 load_dotenv()
 
 # Настройка базы данных
-DB_URL = os.getenv("DB_URL")
+DB_URL = os.getenv('DB_URL', 'sqlite+aiosqlite:///./lab3.db')
 
 # Создаем асинхронный движок
 engine = create_async_engine(DB_URL, echo=True)
